@@ -6,7 +6,9 @@ async function getAllProducts() { // fetch all products
 }
 
 async function getProductById(id) { // fetch product by id
-    const { rows } = await pool.query("SELECT * FROM public.products where product_id = $1",[id]);
+    const { rows } = await pool.query(
+      "SELECT p.*,i.quantity FROM public.products p JOIN public.inventory i ON p.product_id = i.product_id WHERE p.product_id = $1;"
+      ,[id]);
     return rows;
 }
 
@@ -16,7 +18,7 @@ async function deleteProductById(id) { // delete product by id
 }
 
 async function getProductsByCategory(id) { // fetch products by category id
-  const { rows } = await pool.query("SELECT * FROM public.products where category_id = $1",[id]);
+  const { rows } = await pool.query("SELECT p.*,i.quantity FROM public.products p JOIN public.inventory i ON p.product_id = i.product_id WHERE category_id = $1",[id]);
   return rows;
 }
 
@@ -50,22 +52,40 @@ async function createNewProduct( name,price,description,category_id,image_url ) 
 }
 
 async function getAllCategories() { // fetch all categories
-  const { rows } = await pool.query("SELECT * FROM public.categories");
+  const { rows } = await pool.query(
+    `
+      SELECT 
+      c.*,
+      COUNT(p.product_id) AS product_count
+      FROM public.categories c
+      LEFT JOIN public.products p
+        ON c.category_id = p.category_id
+      GROUP BY c.category_id, c.name;
+    `
+  );
   return rows;
 }
 
 async function getCategoryById(id) { // fetch category by id
   const { rows } = await pool.query(
-    "SELECT * FROM public.categories where category_id = $1",
-    [id]
+    `
+      SELECT 
+      c.*,
+      COUNT(p.product_id) AS product_count
+      FROM public.categories c
+      LEFT JOIN public.products p
+        ON c.category_id = p.category_id
+      WHERE c.category_id = $1
+      GROUP BY c.category_id, c.name;
+    `,[id]
   );
   return rows;
 }
 
-async function createCategory(name) { // create new category
+async function createCategory(name,description,image_url) { // create new category
   const { rows } = await pool.query( 
-    "INSERT INTO categories (name) VALUES ($1) RETURNING *",
-    [name]
+    "INSERT INTO categories (name,description,image_url) VALUES ($1,$2,$3) RETURNING *",
+    [name,description,image_url]
   );
   return rows[0];
 }

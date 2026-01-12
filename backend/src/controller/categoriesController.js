@@ -23,8 +23,8 @@ async function fetchCategoryById(req, res) {  // Function to fetch a category by
 }
 async function createNewCategory(req, res) {  // Function to create new category
     try{
-        const { name } = req.body;
-        const category = await db.createCategory(name);
+        const { name, description, image } = req.body; // now includes image URL
+        const category = await db.createCategory(name, description, image);
         res.status(200).json(category);
         console.log('Fetched category:', category);
     }catch (error) {

@@ -1,12 +1,16 @@
 import { ArrowLeft } from 'lucide-react'
-import { NavLink } from 'react-router'
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { Boxes, PencilLine, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import BlurModalWrapper from '../components/modals/BlurModalWrapper';
+import productService from '../services/productService';
+
 const ProductDetailsPage = () => {
 
     const navigate = useNavigate();
     const { state } = useLocation();
+    const [isDelete,setIsDelete] = useState(false);
 
     return (
         <div className='p-4 mt-10 mx-auto max-w-7xl'>
@@ -42,7 +46,7 @@ const ProductDetailsPage = () => {
                             <button className=' text-sm flex gap-2 p-2 rounded-xl w-[70%] bg-gradient-to-r from-indigo-600 to-emerald-500 text-white items-center justify-center transition-transform duration-300 ease-out hover:bg-indigo-600 hover:-translate-y-1 cursor-pointer'>
                                 <PencilLine className='w-5 h-5'  /> Edit Product
                             </button>
-                            <button className='text-sm flex gap-2 p-2 rounded-xl w-[30%] bg-red-500 text-white items-center justify-center ransition-transform duration-300 ease-out hover:bg-red-600 hover:-translate-y-1 cursor-pointer'>
+                            <button onClick={()=>setIsDelete(true)} className='text-sm flex gap-2 p-2 rounded-xl w-[30%] bg-red-500 text-white items-center justify-center ransition-transform duration-300 ease-out hover:bg-red-600 hover:-translate-y-1 cursor-pointer'>
                                 <Trash2 className='w-5 h-5' /> Delete
                             </button>
                         </div>
@@ -63,8 +67,43 @@ const ProductDetailsPage = () => {
         
                         </div>
                     </div>
-
                 </div>
+                {isDelete && (
+                    <BlurModalWrapper title="Delete Category" onClose={() => setIsDelete(false)}>
+                        <div className="flex flex-col justify-center items-center gap-4 mt-6">
+                        <img src={state.image} alt="" className="rounded-2xl w-full h-62" />
+                        <div className="w-full text-center">
+                            <h1 className="text-slate-500 text-lg font-semibold">
+                            Are you sure you want to delete {state.title}? 
+                            </h1>
+                            <p>This action cannot be undone.</p>
+                        </div>
+                        <div className="flex justify-center gap-4 w-full mt-6"> 
+                            <button
+                            onClick={() => setIsDelete(false)}
+                            className="px-4 py-2 w-[45%] rounded-lg bg-white text-gray-800 transition hover:bg-gray-100"
+                            >
+                            Cancel
+                            </button>
+                            <button
+                            onClick={async () => {
+                                try{
+                                await productService().delete(state.id);
+                                setIsDelete(false);
+                                navigate(-1);
+                                }catch(err){
+                                alert(err.message);
+                                return;
+                                }
+                            }}
+                            className="px-4 py-2 w-[45%] rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
+                            >
+                            Delete
+                            </button>
+                        </div>
+                        </div>
+                    </BlurModalWrapper>
+                )}
         </div>
     )
 }

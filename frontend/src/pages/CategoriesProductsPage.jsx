@@ -7,7 +7,6 @@ import axios from 'axios'
 import ProductCard from '../components/modals/ProductCard'
 import BlurModalWrapper from '../components/modals/BlurModalWrapper'
 import AddProductForm from '../components/Forms/AddProductForm'
-import productService from '../services/productService'
 
 const CategoriesProductsPage = () => {
 

@@ -39,17 +39,55 @@ async function updateProductById(id,name,price,description,image_url) { // updat
     return rows[0];
 }
   
-async function createNewProduct( name,price,description,category_id,image_url ) { // create new product
-  const { rows } = await pool.query(
-    `
-      INSERT INTO products (name, price, description, category_id, image_url)
-      VALUES ($1, $2, $3, $4, $5)
-      RETURNING *
-    `,
-    [name, price, description, category_id, image_url]
-  );
-  return rows[0];
+async function createNewProduct(
+  name,
+  price,
+  description,
+  category_id,
+  image_url,
+  stock
+) {
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    // Insert product
+    const productResult = await client.query(
+      `
+        INSERT INTO products (name, price, description, category_id, image_url)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING *
+      `,
+      [name, price, description, category_id, image_url]
+    );
+
+    const product = productResult.rows[0];
+    console.log("Inserted product:", product);
+    // Insert inventory using product_id
+    await client.query(
+      `
+        INSERT INTO inventory (product_id, quantity)
+        VALUES ($1, $2)
+      `,
+      [product.product_id, stock]
+    );
+
+    // Commit transaction
+    await client.query("COMMIT");
+
+    return product;
+
+  } catch (error) {
+    // Something failed — rollback everything
+    await client.query("ROLLBACK");
+    throw error;
+
+  } finally {
+    client.release();
+  }
 }
+
 
 async function getAllCategories() { // fetch all categories
   const { rows } = await pool.query(

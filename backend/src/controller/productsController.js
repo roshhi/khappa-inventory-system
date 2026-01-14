@@ -57,8 +57,8 @@ async function fetchProductsForCategory(req, res) { // Function to fetch product
 }  
 async function createNewProduct(req, res) { // Function to create a new product
     try {
-      const { name,price,description,category_id,image_url } = req.body;
-      const product = await db.createNewProduct( name,price,description,category_id,image_url );
+      const { name,price,description,category_id,image_url,stock } = req.body;
+      const product = await db.createNewProduct( name,price,description,category_id,image_url,stock );
       console.log('Created product:', product);
       res.status(201).json(product);
   

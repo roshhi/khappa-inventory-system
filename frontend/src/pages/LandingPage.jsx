@@ -1,5 +1,6 @@
 import {CirclePile, ArrowRight, Package, ShoppingBag, TrendingUp } from "lucide-react";
 import { NavLink } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 export default function LandingPage(){
 
@@ -32,37 +33,52 @@ export default function LandingPage(){
           backgroundColor: 'hover:bg-green-50',
         },
     ];
+    const containerVariants = {
+        hidden: {},
+        visible: {
+          transition: {
+            staggerChildren: 0.2,
+          },
+        },
+    };
+    const itemVariants = {
+        hidden: { opacity: 0, y: 50 },
+        visible: { opacity: 1, y: 0, transition: { duration: 1 } },
+    };
+    const itemVariants2 = {
+        hidden: { opacity: 0, y: -20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 1 } },
+    };
 
     return(
         
         <div className="flex flex-col items-center justify-center">
-            <div className="flex flex-col items-center justify-center space-y-2 mt-25 ">
-                <div className="flex items-center text-xs bg-[#EEF2FF] w-fit px-4 py-2 rounded-2xl space-x-2 text-indigo-600 group">
+            <motion.div initial="hidden" animate="visible" variants={containerVariants} className="flex flex-col items-center justify-center space-y-2 mt-25 ">
+                <motion.div variants={itemVariants2} className="flex items-center text-xs bg-[#EEF2FF] w-fit px-4 py-2 rounded-2xl space-x-2 text-indigo-600 group">
                     <CirclePile className="w-5 h-5 transition-transform duration-500 ease-out group-hover:rotate-180"/>
                     <h1 className="text-md">Modern Inventory Solution</h1>
-                </div>
-                <div className="flex flex-col items-center justify-center">
+                </motion.div>
+                <motion.div variants={itemVariants2} className="flex flex-col items-center justify-center">
                     <h1 className="text-5xl text-center md:text-6xl xl:text-7xl font-extrabold mt-3">Inventory Management,</h1>
                     <span className="text-5xl md:text-6xl xl:text-7xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-indigo-500 to-emerald-500 leading-none pb-2">Reimagined.</span>
                     <p className="text-xl pl-5 pr-5 text-[#62748E] text-center max-w-2xl mt-2 ">Khappa streamline your product tracking with an elegant, powerful interface 
                     designed for modern businesses.</p>
-                </div>
-                <div className="flex items-center space-x-6 mt-6">
+                </motion.div>
+                <motion.div variants={itemVariants2} className="flex items-center space-x-6 mt-6">
                     <NavLink to={'/categories'}>
                         <button className=" group flex items-center space-x-2 bg-gradient-to-r from-indigo-600 to-emerald-500 text-white px-6 py-3 rounded-2xl transition-transform duration-300 ease-out hover:bg-none border-2 hover:text-indigo-500 hover:border-indigo-500 cursor-pointer">
                             <p>Explore Dashboard </p>
                             <ArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-2"/>
                         </button>
                     </NavLink>
-                   
-                </div>
-            </div>
+                </motion.div>
+            </motion.div>
             <div className="mt-20 mb-20">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  ">
+                <motion.div initial="hidden" animate="visible" variants={containerVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  ">
                     {stats.map((stat)=>{
                         const Icon = stat.icon;
                         return(
-                            <div className={`flex flex-col items-center text-center shadow-lg rounded-xl min-w-[240px] p-6 m-4 border-t-4 transition-transform duration-300 ease-out ${stat.border} ${stat.backgroundColor} hover:-translate-y-1`}>
+                            <motion.div key={stat.label} variants={itemVariants} className={`flex flex-col items-center text-center shadow-lg rounded-xl min-w-[240px] p-6 m-4 border-t-4 transition-transform duration-300 ease-out ${stat.border} ${stat.backgroundColor} hover:-translate-y-1`}>
                                 <div className={`w-15 h-15 mx-auto mb-6 text-white rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg`}> 
                                     <Icon/> 
                                 </div>
@@ -72,13 +88,11 @@ export default function LandingPage(){
                                 <h2 className="text-xl text-[#62748E] ">
                                     {stat.label}
                                 </h2>
-                            </div>
+                            </motion.div>
                         )
                     })}
-                </div>
+                </motion.div>
             </div>
         </div>
     )
-
-
 }

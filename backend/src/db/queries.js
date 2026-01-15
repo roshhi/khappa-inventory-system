@@ -1,7 +1,7 @@
 import pool from "./pool.js";
 
 async function getAllProducts() { // fetch all products
-  const { rows } = await pool.query("SELECT * FROM public.products");
+  const { rows } = await pool.query("SELECT p.product_id,name,price,description,category_id,image_url,quantity FROM public.products p JOIN public.inventory i ON p.product_id = i.product_id");
   return rows;
 }
 

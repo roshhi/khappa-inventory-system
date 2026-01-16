@@ -75,7 +75,7 @@ const UpdateCategoryForm = ({ onClose, existingTitle, existingDescription, exist
             )}
 
             <button type='submit' disabled={loading} className='relative w-full mt-6 h-12 rounded-xl bg-gradient-to-r from-indigo-600 to-emerald-500 text-white font-bold hover:text-lg hover:font-extrabold transition-all cursor-pointer'>
-                {loading ? <div className='absolute loaderTwo top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]'></div> : "Update Category"}
+                {loading ? <div className='absolute loaderTwo text-white top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]'></div> : "Update Category"}
             </button>
         </form>
     );

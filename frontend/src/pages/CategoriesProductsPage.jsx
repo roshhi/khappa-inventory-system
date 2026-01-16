@@ -60,15 +60,6 @@ const CategoriesProductsPage = () => {
                     </NavLink>
                     <h1 className="capitalize text-4xl font-extrabold">{title}</h1>
                     <p className='text-xl text-[#62748E] mt-1'>{description}</p>
-                    <div className='flex flex-col sm:flex-row sm:justify-between sm:items-center mt-6 gap-4'>
-                        <div>
-                            <input className='w-[90vw] sm:w-[80vw] xl:max-w-[1100px] rounded-2xl border-[#62748E] p-4 pl-9 shadow-[0_0_12px_rgba(0,0,0,0.12)]' type="text" placeholder="Search products..."/>
-                        </div>
-                        <div className='w-[90vw] sm:w-[20vw] xxl:max-w-[150px]  flex gap-2 bg-[#F0F5F9] rounded-2xl p-4 justify-center items-center'>
-                            <ListFilter />
-                            <p>Filters</p> 
-                        </div>
-                    </div>
                     {loader ? <CategorySkeletonGrid/> 
                     :
                     <motion.div variants={containerVariants} initial="hidden" animate="visible" className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 justify-items-center lg:justify-items-start'>

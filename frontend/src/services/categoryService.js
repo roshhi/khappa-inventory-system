@@ -11,8 +11,8 @@ const categoryService = () => {
         },
 
         getCategoryCount: async () => {
-            const categories = await axios.get(API_BASE_URL);
-            return categories.data.length;
+            const res = await axios.get(API_BASE_URL);
+            return res.data.length;
         },
 
         uploadImage: async (file) => {

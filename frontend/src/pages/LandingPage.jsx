@@ -3,18 +3,37 @@ import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import productService from "../services/productService";
 import categoryService from "../services/categoryService";
-
+import { useEffect,useState } from "react";
 export default function LandingPage(){
 
+    const [totalStocks, setTotalStocks] = useState(0);
+    const [totalProducts, setTotalProducts] = useState(0);
+    const [totalCategories, setTotalCategories] = useState(0);
+    const [loading, setLoading] = useState(true);
 
-    const totalStocks = productService().getStocksCount();
-    const totalCategories = categoryService().getCategoryCount();
-    const totalProducts = productService().getProductCount();
+    useEffect(() => {
+      const fetchStats = async () => {
+        try {
+          const stocks = await productService().getStocksCount();
+          const products = await productService().getProductCount();
+          const categories = await categoryService().getCategoryCount();
+  
+          setTotalStocks(stocks);
+          setTotalProducts(products);
+          setTotalCategories(categories);
+          setLoading(false);
+        } catch (error) {
+          console.error("Failed to load stats", error);
+        }
+      };
+  
+      fetchStats();
+    }, []);
 
     const stats = [
         {
           label: 'Total Stock',
-          value: {totalStocks},
+          value: totalStocks,
           icon: Package,
           color: 'from-violet-500 to-purple-600',
           delay: 0.1,
@@ -23,7 +42,7 @@ export default function LandingPage(){
         },
         {
           label: 'Products',
-          value: {totalProducts},
+          value: totalProducts,
           icon: ShoppingBag,
           color: 'from-cyan-500 to-blue-600',
           delay: 0.2,
@@ -32,7 +51,7 @@ export default function LandingPage(){
         },
         {
           label: 'Categories',
-          value: {totalCategories},
+          value: totalCategories,
           icon: TrendingUp,
           color: 'from-emerald-500 to-green-600',
           delay: 0.3,
@@ -89,8 +108,8 @@ export default function LandingPage(){
                                 <div className={`w-15 h-15 mx-auto mb-6 text-white rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg`}> 
                                     <Icon/> 
                                 </div>
-                                <div className="text-4xl font-extrabold">
-                                    {stat.value}
+                                <div className="relative text-4xl font-extrabold w-12 h-12">
+                                    {loading?<div className="absolute text-black/50 loaderTwo top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]"></div>:stat.value}
                                 </div>
                                 <h2 className="text-xl text-[#62748E] ">
                                     {stat.label}

@@ -77,6 +77,8 @@ const UpdateProductForm = ({ onProductUpdated, onClose, category_id, productData
                 className='bg-white w-full p-3 rounded-xl mt-1 mb-4 border border-gray-200' 
                 placeholder='Enter Product Price' 
                 required
+                max={1000000}
+                min={1}
             />
 
             <label className='font-medium text-sm'>Stock</label>
@@ -87,6 +89,8 @@ const UpdateProductForm = ({ onProductUpdated, onClose, category_id, productData
                 className='bg-white w-full p-3 rounded-xl mt-1 mb-4 border border-gray-200' 
                 placeholder='Enter Product Stock' 
                 required
+                max={1000000}
+                min={0}
             />  
 
             {preview ? (

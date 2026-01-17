@@ -109,7 +109,7 @@ export default function LandingPage(){
                                     <Icon/> 
                                 </div>
                                 <div className="relative text-4xl font-extrabold w-12 h-12">
-                                    {loading?<div className="absolute text-black/50 loaderTwo top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]"></div>:stat.value}
+                                    {loading?<div className="absolute text-black/50 loaderTwo top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] truncate"></div> : stat.value > 9999 ? "9999+" : stat.value }
                                 </div>
                                 <h2 className="text-xl text-[#62748E] ">
                                     {stat.label}
